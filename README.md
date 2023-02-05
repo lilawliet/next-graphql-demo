@@ -56,7 +56,7 @@ const nextConfig = {
 
 ### 添加 Eslint & Prettier & Husky & Lint staged 代码规范
 
-#### Eslint
+#### Eslint (代码检查)
 
 ```
 // bash 安装 @typescript-eslint/eslint-plugin 包
@@ -86,7 +86,7 @@ yarn add --dev @typescript-eslint/eslint-plugin
 }                                                       +
 ```
 
-#### Prettier
+#### Prettier (代码规范)
 
 ```
 // bash 安装 prettier 和 eslint-config-prettier 包
@@ -135,7 +135,7 @@ yarn add --dev prettier eslint-config-prettier
 }
 ```
 
-#### Husky (提交代码时检查)
+#### Husky (git hook)
 
 ```
 // bash 安装 Husky 包
@@ -152,7 +152,7 @@ yarn husky install
 yarn husky add .husky/pre-commit "yarn tsc --noEmit && yarn eslint . && yarn prettier --write ."
 ```
 
-#### Lint staged
+#### Lint staged (只检查指定代码)
 
 ```
 yarn add --dev lint-staged
