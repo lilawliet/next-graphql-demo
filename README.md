@@ -54,31 +54,74 @@ const nextConfig = {
 }
 ```
 
+### [添加 Tailwindcss (CSS 框架)](https://tailwindcss.com/docs/guides/nextjs)
+
+> // bash<br>
+> // 直接创建 next + tailwindcss demo 可用以下命令行<br>
+> yarn create next-app --example with-tailwindcss with-tailwindcss-app
+
+```
+# bash
+yarn add --dev tailwindcss postcss autoprefixer
+```
+
+```
+# init
+npx tailwindcss init -p
+```
+
+```
+# tailwind.config.js
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [                                          +
+    "./app/**/*.{js,ts,jsx,tsx}",                     +
+    "./pages/**/*.{js,ts,jsx,tsx}",                   +
+    "./components/**/*.{js,ts,jsx,tsx}",              +
+                                                      +
+    // Or if using `src` directory:                   +
+    "./src/**/*.{js,ts,jsx,tsx}",                     +
+  ],                                                  +
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+```
+
+```
+# styles/globals.css
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
 ### 添加 Eslint & Prettier & Husky & Lint staged 代码规范
 
 #### Eslint (代码检查)
 
 ```
-// bash 安装 @typescript-eslint/eslint-plugin 包
+# bash 安装 @typescript-eslint/eslint-plugin 包
 yarn add --dev @typescript-eslint/eslint-plugin
 ```
 
 ```
-// .eslintrc.json
+# .eslintrc.json
 "plugins": ["@typescript-eslint"],                      +
 "extends": [
   "next/core-web-vitals",
   "plugin:@typescript-eslint/recommended"               +
 ],
 "rules": {
-  // I suggest you add those two rules:
+  # I suggest you add those two rules:
   "@typescript-eslint/no-unused-vars": "error",
   "@typescript-eslint/no-explicit-any": "error"
 }
 ```
 
 ```
-// .vscode setting.json (开发工具 vscode 配置保存时自动格式化)
+# .vscode setting.json (开发工具 vscode 配置保存时自动格式化)
 {                                                       +
   "editor.codeActionsOnSave": {                         +
     "source.fixAll.eslint": true                        +
@@ -89,12 +132,12 @@ yarn add --dev @typescript-eslint/eslint-plugin
 #### Prettier (代码规范)
 
 ```
-// bash 安装 prettier 和 eslint-config-prettier 包
+# bash 安装 prettier 和 eslint-config-prettier 包
 yarn add --dev prettier eslint-config-prettier
 ```
 
 ```
-// .prettierrc.json
+# .prettierrc.json
 {
   "semi": false,
   "trailingComma": "es5",
@@ -106,49 +149,49 @@ yarn add --dev prettier eslint-config-prettier
 ```
 
 ```
-// .eslintrc.json
+# .eslintrc.json
 {
-  // ...
+  # ...
   "extends": [
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended",
-    "prettier" // 最后加上 prettier, eslint 与 prettier 的冲突将被覆盖           +
+    "prettier" # 最后加上 prettier, eslint 与 prettier 的冲突将被覆盖           +
   ],
-  // ...
+  # ...
 }
 ```
 
 ```
-// .vscode setting.json (开发工具 vscode 配置文件)
+# .vscode setting.json (开发工具 vscode 配置文件)
 {
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "editor.formatOnSave": true, // Tell VSCode to format files on save                                             +
-  "editor.defaultFormatter": "esbenp.prettier-vscode" // Tell VSCode to use Prettier as default file formatter    +
+  "editor.formatOnSave": true, # Tell VSCode to format files on save                                             +
+  "editor.defaultFormatter": "esbenp.prettier-vscode" # Tell VSCode to use Prettier as default file formatter    +
 
-  // OR If want only typescript files to be formatted on save
-  // "[typescript]": {                                                                                            +
-  //  "editor.formatOnSave": true,                                                                                +
-  //  "editor.defaultFormatter": "esbenp.prettier-vscode"                                                         +
-  // }                                                                                                            +
+  # OR If want only typescript files to be formatted on save
+  # "[typescript]": {                                                                                            +
+  #  "editor.formatOnSave": true,                                                                                +
+  #  "editor.defaultFormatter": "esbenp.prettier-vscode"                                                         +
+  # }                                                                                                            +
 }
 ```
 
 #### Husky (git hook)
 
 ```
-// bash 安装 Husky 包
+# bash 安装 Husky 包
 yarn add --dev husky
 ```
 
 ```
-// enable husky
+# enable husky
 yarn husky install
 ```
 
 ```
-// add the git hook
+# add the git hook
 yarn husky add .husky/pre-commit "yarn tsc --noEmit && yarn eslint . && yarn prettier --write ."
 ```
 
@@ -159,29 +202,29 @@ yarn add --dev lint-staged
 ```
 
 ```
-// lint-staged.config.js
+# lint-staged.config.js
 module.exports = {
-  // Type check TypeScript files
+  # Type check TypeScript files
   '**/*.(ts|tsx)': () => 'yarn tsc --noEmit',
 
-  // Lint then format TypeScript and JavaScript files
+  # Lint then format TypeScript and JavaScript files
   '**/*.(ts|tsx|js)': (filenames) => [
     `yarn eslint --fix ${filenames.join(' ')}`,
     `yarn prettier --write ${filenames.join(' ')}`,
   ],
 
-  // Format MarkDown and JSON
+  # Format MarkDown and JSON
   '**/*.(md|json)': (filenames) =>
     `yarn prettier --write ${filenames.join(' ')}`,
 }
 ```
 
 ```
-// file .husky/pre-commit file
+# file .husky/pre-commit file
 
 #!/bin/sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-yarn tsc --noEmit && yarn eslint . && yarn prettier --write . // 删除这一行          -
-yarn lint-staged                                              // 替换成这一行        +
+yarn tsc --noEmit && yarn eslint . && yarn prettier --write . # 删除这一行          -
+yarn lint-staged                                              # 替换成这一行        +
 ```
