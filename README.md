@@ -1,6 +1,6 @@
 next (v 13.1) + ant-design-mobile (v 5)
 
-## 依赖
+## 技术栈
 
 - node`^16.10.0`: node 开发版本
 - next`^13.1.6`: 服务器框架
@@ -11,6 +11,7 @@ next (v 13.1) + ant-design-mobile (v 5)
 - prettier: 代码格式化
 - husky: Git Commit Hooks
 - Lint staged: 只在需要时检查代码
+- cross-env: 跨平台设置环境变量
 
 ## 开始运行
 
@@ -30,16 +31,21 @@ yarn dev
 pnpm dev
 ```
 
-## 开发流程（指引）
+## 架构搭建流程（指引）
 
 ### 创建 App
 
 ```
 # bash
 yarn create next-app
+# | TypeScript: Yes
+# | Eslint: Yes
+# | `src/`: No
+# | `app/`: No
+# | import alias: @/*
 ```
 
-### 添加 Ant Design Mobile UI 框架
+### 添加 [Ant Design Mobile](https://mobile.ant.design/zh) UI 框架
 
 ```
 # bash
@@ -54,7 +60,7 @@ const nextConfig = {
 }
 ```
 
-### [添加 Tailwindcss (CSS 框架)](https://tailwindcss.com/docs/guides/nextjs)
+### 添加 [Tailwindcss](https://tailwindcss.com/docs/guides/nextjs) (CSS 框架)
 
 > // bash<br>
 > // 直接创建 next + tailwindcss demo 可用以下命令行<br>
@@ -95,9 +101,11 @@ module.exports = {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+# 删除多余样式
 ```
 
-### 添加 Eslint & Prettier & Husky & Lint staged 代码规范
+### 添加 [Eslint & Prettier & Husky & Lint staged](https://paulintrognon.fr/blog/typescript-prettier-eslint-next-js) 代码规范
 
 #### Eslint (代码检查)
 
@@ -227,4 +235,84 @@ module.exports = {
 
 yarn tsc --noEmit && yarn eslint . && yarn prettier --write . # 删除这一行          -
 yarn lint-staged                                              # 替换成这一行        +
+```
+
+### 全局配置 .env
+
+- 新建文件
+  - .env 基础环境配置文件
+  - .env.local 本地环境配置文件
+  - .env.development 开发环境配置文件
+  - .env.production 生产环境配置文件
+  - environment.d.ts 环境配置变量声明文件
+
+```
+# tsconfig.json
+"include": [
+  "next-env.d.ts",
+  "environment.d.ts",       +
+  "**/*.ts",
+  "**/*.tsx"],
+```
+
+```
+# environment.d.ts
+declare namespace NodeJS {
+  export interface ProcessEnv {
+    readonly NODE_ENV: string     // 环境变量声明
+  }
+}
+```
+
+```
+# .env.development
+NODE_ENV = development
+```
+
+```
+# .env.production
+NODE_ENV = production
+```
+
+```
+# bash cross-env: 跨平台设置环境变量
+yarn add cross-env
+```
+
+```
+# package.json
+...
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development next dev",           +
+    "prod": "cross-env NODE_ENV=production next dev",           +
+    "build": "next build",
+    "build:prod": "cross-env NODE_ENV=production next build",   +
+    ...
+  }
+...
+```
+
+### 添加 [I18Next](https://react.i18next.com) 语言国际化
+
+```
+# bash
+yarn add react-i18next i18next
+```
+
+### 全局数据管理 Redux
+
+> [React Redux](https://react-redux.js.org/) &nbsp;React 全局数据 <br>[Redux Toolkit](https://redux-toolkit.js.org/) &nbsp;简化配置存储 <br> [Redux Persist](https://github.com/rt2zz/redux-persist#readme) &nbsp;持久化存储 <br>
+
+```
+# bash
+yarn add react-redux @types/react-redux @reduxjs/toolkit redux-persist
+```
+
+修改目录结构:
+
+- 添加 `src/`, 将 `pages/api/` 移至 `src/api/`
+- 创建 `src/store/index.ts`
+
+```
+# src/store/index.ts
 ```
