@@ -16,19 +16,22 @@ pnpm dev
 
 ## Development Process (Guidance)
 
-### 1.create app
+### 1. create app
 
-```bash
+```
+# bash
 yarn create next-app
 ```
 
-### 2.andt mobile
+### 2. andt mobile
 
-```bash
+```
+# bash
 yarn add antd-mobile
 ```
 
-```next.config.js
+```
+# next.config.js
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ['antd-mobile'],                   +
