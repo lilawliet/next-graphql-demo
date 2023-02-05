@@ -1,3 +1,15 @@
 {
-  "extends": "next/core-web-vitals"
+  // "@typescript-eslint"`: 告诉 ESLint 加载 @typescript-eslint/eslint-plugin 包作为插件
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "next/core-web-vitals",
+    // "plugin:@typescript-eslint/recommended`: ESLint 内置的 "推荐 "配置
+    "plugin:@typescript-eslint/recommended",
+    // 最后加上 prettier, eslint 与 prettier 的冲突将被覆盖
+    "prettier"
+  ],
+  "rules": {
+    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-explicit-any": "error"
+  }
 }

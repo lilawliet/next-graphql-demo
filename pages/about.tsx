@@ -3,6 +3,8 @@
 import { Button } from "antd-mobile";
 
 function About() {
+  var a = "10";
+
   return (
     <div>
       About
