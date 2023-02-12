@@ -1,6 +1,7 @@
 declare namespace NodeJS {
   export interface ProcessEnv {
     readonly NODE_ENV: string
-    readonly BASE_LNG: string
+    readonly NEXT_PUBLIC_VERSION: string
+    readonly NEXT_PUBLIC_LOCALE: string
   }
 }

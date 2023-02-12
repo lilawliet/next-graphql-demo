@@ -1,31 +1,32 @@
+import { LOCALE } from '@/src/i18n'
 import { createSlice } from '@reduxjs/toolkit'
 import { updateVersion } from './actions'
 
 export type GlobalState = {
   version: string
-  locale: string
+  locale: LOCALE
 }
 
 const initialState: GlobalState = {
-  version: '',
-  locale: process.env.BASE_LNG,
+  version: process.env.NEXT_PUBLIC_VERSION,
+  locale: process.env.NEXT_PUBLIC_LOCALE as LOCALE,
 }
 const slice = createSlice({
   name: 'global',
   initialState,
   reducers: {
-    add(
+    changeLocale(
       state,
       action: {
         payload: {
-          version: any
+          locale: LOCALE
         }
       }
     ) {
       const {
-        payload: { version },
+        payload: { locale },
       } = action
-      state.version = version
+      state.locale = locale
     },
     clean(state) {
       state = initialState
@@ -34,7 +35,7 @@ const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(updateVersion, () => {
-      // 数据结构如果发生了变更，该怎么处理
+      // 版本更新的时候重新初始化 state
     })
   },
 })

@@ -1,43 +1,38 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
-// import zh_CN from './locales/zh_CN.json'
-// import en_US from './locales/en_US.json'
+import zh_CN from './_locales/zh_CN.json'
+import en_US from './_locales/en_US.json'
 
-export const fetchLocale = async (locale: string) => {
-  const res = await window.fetch(`./_locales/${locale}.json`)
-  const data: Record<string, string> = await res.json()
-  return Object.keys(data).reduce((res, key) => {
-    return {
-      ...res,
-      [key.replace(/__/g, ' ')]: data[key],
-    }
-  }, {})
-}
+export type LOCALE = 'zh_CN' | 'en_US'
 
 i18n.use(initReactI18next).init({
-  lng: process.env.BASE_LNG,
-  fallbackLng: process.env.BASE_LNG,
-  // resources: {
-  //   zh_CN: {
-  //     translation: zh_CN,
-  //   },
-  //   en_US: {
-  //     translation: en_US,
-  //   },
-  // },
+  lng: process.env.NEXT_PUBLIC_LOCALE,
+  fallbackLng: process.env.NEXT_PUBLIC_LOCALE,
+  resources: {
+    zh_CN: {
+      translation: zh_CN,
+    },
+    en_US: {
+      translation: en_US,
+    },
+  },
   debug: false,
   interpolation: {
     escapeValue: false,
   },
 })
 
-export const I18N_NS = 'translations'
-export const addResourceBundle = async (locale: string) => {
-  if (i18n.hasResourceBundle(locale, I18N_NS)) return
-  const bundle = await fetchLocale(locale)
-  i18n.addResourceBundle(locale, 'translations', bundle)
-}
+// export const I18N_NS = 'translations'
+// export const addResourceBundle = async (locale: string) => {
+//   if (i18n.hasResourceBundle(locale, I18N_NS)) return
+//   const bundle = await fetchLocale(locale)
+//   i18n.addResourceBundle(locale, I18N_NS, bundle)
+// }
 
-// addResourceBundle(process.env.BASE_LNG)
+// i18n.on('languageChanged', function (lng: string) {
+//   addResourceBundle(lng);
+// });
+
+// addResourceBundle(process.env.NEXT_PUBLIC_LOCALE)
 
 export default i18n
