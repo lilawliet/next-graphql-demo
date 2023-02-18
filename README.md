@@ -1,10 +1,11 @@
-next (v 13.1) + ant-design-mobile (v 5)
+Next (v 13.1) + Ant-Design-Mobile (v 5) + Prisma + React Query
 
 ## 技术栈
 
 - node`^16.10.0`: node 开发版本
 - next`^13.1.6`: 服务器框架
 - antd-mobile`^5.28.0`: UI 框架
+- Prisma：ORM 数据连接工具
 - eslint: 代码检查
   - `"plugins": "@typescript-eslint"`: 告诉 ESLint 加载 @typescript-eslint/eslint-plugin 包作为插件
   - `"extends": "plugin:@typescript-eslint/recommended`: ESLint 内置的 "推荐 "配置
@@ -316,4 +317,11 @@ yarn add react-redux @types/react-redux @reduxjs/toolkit redux-persist
 
 ```
 # src/store/index.ts
+```
+
+### Prisma ORM 模型及数据库连接工具
+
+```
+# bash
+yarn add prisma
 ```
