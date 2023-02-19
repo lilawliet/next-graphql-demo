@@ -1,0 +1,14 @@
+// import { schema } from '@/pages/api/graphql'
+// import { createYoga } from 'graphql-yoga'
+// import { createServer } from 'http'
+// import { createContext } from './context'
+
+// function client() {
+//   const yoga = createYoga({ schema, context: createContext })
+//   const server = createServer(yoga)
+//   server.listen(3000, () => {
+//     console.info('Server is running on http://localhost:3000/graphql')
+//   })
+// }
+
+// export default client

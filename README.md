@@ -1,17 +1,25 @@
-Next (v 13.1) + Ant-Design-Mobile (v 5) + Prisma + React Query
+Next (v 13.1) + Ant-Design-Mobile (v 5) + Prisma + SWR + GraphQL Yoga
 
 ## 技术栈
 
 - node`^16.10.0`: node 开发版本
 - next`^13.1.6`: 服务器框架
 - antd-mobile`^5.28.0`: UI 框架
-- Prisma：ORM 数据连接工具
+- prisma`^4.10.1`：数据库 ORM 管理工具包（代替 mongodb 库进行数据库连接，并对数据进行对象-关系映射管理）
+- swr`^2.0.3`： 用于数据请求的 React Hooks 库 （数据请求全局管理，便于切换数据请求句柄 Fetch / Axios / GraphQL）
+  > stale-while-revalidate（简称 SWR）：一种由 HTTP RFC 5861 提出的 HTTP 缓存策略.<br>
+  > 客户端将接受过期的（stale）响应，同时在后台异步检查是否有新的响应:<br>
+  >
+  > - 1. 如果缓存未过期，则发起请求时将直接从本地拿取数据
+  > - 2. 如果缓存过期，但过期时长未超出 stale-while-revalidate 设定的值，发起请求时浏览器仍然会从本地拿取数据，但是同时它会异步发出重新校验（revalidate)请求。重新校验请求所返回的响应值将为替代之前的响应缓存存于本地，并刷新缓存计时器。
+  > - 3. 如果缓存过期，且过期时长超出 stale-while-revalidate 设定的值，浏览器发起请求时会直接请求服务端拿取最新响应数据并刷新本地缓存。
+- graphql-yoga`^3.6.0`：搭建 GraphQL 服务器
 - eslint: 代码检查
-  - `"plugins": "@typescript-eslint"`: 告诉 ESLint 加载 @typescript-eslint/eslint-plugin 包作为插件
-  - `"extends": "plugin:@typescript-eslint/recommended`: ESLint 内置的 "推荐 "配置
+  > - `"plugins": "@typescript-eslint"`: 告诉 ESLint 加载 @typescript-eslint/eslint-plugin 包作为插件
+  > - `"extends": "plugin:@typescript-eslint/recommended`: ESLint 内置的 "推荐 "配置
 - prettier: 代码格式化
 - husky: Git Commit Hooks
-- Lint staged: 只在需要时检查代码
+- lint-staged: 只在需要时检查代码
 - cross-env: 跨平台设置环境变量
 
 ## 开始运行
@@ -319,9 +327,102 @@ yarn add react-redux @types/react-redux @reduxjs/toolkit redux-persist
 # src/store/index.ts
 ```
 
-### Prisma ORM 模型及数据库连接工具
+### [Prisma](https://www.prisma.io/) 连接 mongoDB
 
 ```
 # bash
 yarn add prisma
+```
+
+```
+# bash
+# creating your Prisma schema file
+npx prisma init
+```
+
+```
+# .env 中添加 db 链接
+# 如配置有问题查看[官方文档](https://www.prisma.io/docs/concepts/database-connectors/mongodb)
+DATABASE_URL = mongodb://USERNAME:PASSWORD@HOST:PORT/DATABASE
+```
+
+```
+# prisma/schema.prisma 修改 db 链接
+datasource db {
+  provider = "postgresql"                             -
+  provider = "mongodb"                                +
+  url      = env("DATABASE_URL")
+}
+```
+
+```
+# prisma/schema.prisma 中定义模型
+model User {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  name    String
+  email   String?   @unique
+}
+```
+
+```
+# bash 安装 Prisma 客户端
+yarn add @prisma/client
+```
+
+```
+# bash
+# 查看 prisma 命令
+# npx prisma
+# 1. （执行下面这行）依赖库 prisma 中 注入 ORM 模型
+npx prisma generate
+# 2. （执行下面这行） 更新模型到数据库中
+npx prisma db push
+# 同步数据库已有模型
+# npx prisma db pull
+```
+
+```
+# (新建初始化db脚本)scripts/init_db.ts
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
+
+async function main() {
+  await prisma.user.create({
+    data: {
+      name: "Musk"
+    }
+  })
+}
+
+main()
+  .finally(async () => {
+    await prisma.$disconnect()
+  })
+```
+
+```
+# 在 package.json 中加入配置 "type": "module" 才可使用 import 语法
+"type": "module"                      +
+"scripts": {
+  ...
+  }
+```
+
+```
+# bash
+# 脚本初始化数据
+npx ts-node --esm scripts/init_db.ts
+```
+
+### [SWR](https://swr.vercel.app/zh-CN) + [GraphQL Yoga](https://the-guild.dev/graphql/yoga-server/docs)
+
+> swr：用于数据请求的 React Hooks 库<br>
+> 可以用 [React Query](https://react-query-v3.tanstack.com/) 代替 SWR
+> yoga: 搭建 GraphQL 服务器
+
+```
+# bash
+yarn add swr
+yarn add graphql graphql-yoga
 ```
