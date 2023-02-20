@@ -1,4 +1,4 @@
-Nextjs (v 13.1) + Ant-Design-Mobile (v 5) + Redux Toolkit + Prisma + SWR + GraphQL Yoga
+Nextjs (v 13.1) + Ant-Design-Mobile (v 5) + Redux Toolkit + Prisma + SWR + GraphQL Yoga 完整基础示例 + 搭建流程指引
 
 ## 技术栈
 
@@ -273,7 +273,7 @@ yarn lint-staged                                              # 替换成这一�
 declare namespace NodeJS {
   export interface ProcessEnv {
     readonly NODE_ENV: string     // 环境变量声明
-    readonly NEXT_PUBLIC_LOCALE: string  // 暴露环境变量要用 NEXT_PUBLIC_ 前缀或者下载 .env.local 文件中
+    readonly NEXT_PUBLIC_LOCALE: string  // 暴露环境变量要用 NEXT_PUBLIC_ 前缀或者写在 .env.local 文件中
   }
 }
 ```
@@ -289,7 +289,7 @@ NODE_ENV = production
 ```
 
 ```
-# bash cross-env: 跨平台设置环境变量
+# bash cross-env: 跨平台环境变量设置，Windows 平台下需要 cross-env 传递环境变量
 yarn add cross-env
 ```
 
