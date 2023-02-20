@@ -25,3 +25,30 @@ model Link {
   url         String
   ts_created  Int?
 }
+
+// 项目
+model Project {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  desc     String?
+  link     String?
+  ts_begin Int?
+  ts_end   Int?
+  tags     Tag[]
+}
+
+// 公司
+model Company {
+  id   String  @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  desc String?
+  link String?
+  ts_begin Int?
+  ts_end   Int?
+}
+
+// 标签
+type Tag {
+  name String
+  desc String?
+}

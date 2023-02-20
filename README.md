@@ -1,10 +1,12 @@
-Next (v 13.1) + Ant-Design-Mobile (v 5) + Prisma + SWR + GraphQL Yoga
+Nextjs (v 13.1) + Ant-Design-Mobile (v 5) + Redux Toolkit + Prisma + SWR + GraphQL Yoga
 
 ## 技术栈
 
-- node`^16.10.0`: node 开发版本
-- next`^13.1.6`: 服务器框架
-- antd-mobile`^5.28.0`: UI 框架
+- nodejs`^16.10.0`：node 开发版本
+- nextjs`^13.1.6`：服务器框架
+- antd-mobile`^5.28.0`：UI 框架
+- @reduxjs/toolkit`^1.9.2`：运行时数据全局状态管理
+- redux-persist`^6.0.0`：数据持久化（客户端缓存）
 - prisma`^4.10.1`：数据库 ORM 管理工具包（代替 mongodb 库进行数据库连接，并对数据进行对象-关系映射管理）
 - swr`^2.0.3`： 用于数据请求的 React Hooks 库 （数据请求全局管理，便于切换数据请求句柄 Fetch / Axios / GraphQL）
   > stale-while-revalidate（简称 SWR）：一种由 HTTP RFC 5861 提出的 HTTP 缓存策略.<br>
@@ -13,14 +15,16 @@ Next (v 13.1) + Ant-Design-Mobile (v 5) + Prisma + SWR + GraphQL Yoga
   > - 1. 如果缓存未过期，则发起请求时将直接从本地拿取数据
   > - 2. 如果缓存过期，但过期时长未超出 stale-while-revalidate 设定的值，发起请求时浏览器仍然会从本地拿取数据，但是同时它会异步发出重新校验（revalidate)请求。重新校验请求所返回的响应值将为替代之前的响应缓存存于本地，并刷新缓存计时器。
   > - 3. 如果缓存过期，且过期时长超出 stale-while-revalidate 设定的值，浏览器发起请求时会直接请求服务端拿取最新响应数据并刷新本地缓存。
-- graphql-yoga`^3.6.0`：搭建 GraphQL 服务器
-- eslint: 代码检查
-  > - `"plugins": "@typescript-eslint"`: 告诉 ESLint 加载 @typescript-eslint/eslint-plugin 包作为插件
-  > - `"extends": "plugin:@typescript-eslint/recommended`: ESLint 内置的 "推荐 "配置
-- prettier: 代码格式化
-- husky: Git Commit Hooks
-- lint-staged: 只在需要时检查代码
-- cross-env: 跨平台设置环境变量
+- graphql-request`^5.1.0`：GraphQL client 工具, 发送 GraphQL 请求
+- graphql-yoga`^3.6.0`：GraphQL server 工具, 创建 GraphQL 服务器
+- eslint：代码检查
+  > - `"plugins": "@typescript-eslint"`：告诉 ESLint 加载 @typescript-eslint/eslint-plugin 包作为插件
+  > - `"extends": "plugin:@typescript-eslint/recommended`：ESLint 内置的 "推荐 "配置
+- prettier：代码格式化
+- husky：Git Commit Hooks
+- lint-staged：只在需要时检查代码
+- cross-env：跨平台设置环境变量
+- i18next：国际化
 
 ## 开始运行
 
@@ -320,11 +324,10 @@ yarn add react-redux @types/react-redux @reduxjs/toolkit redux-persist
 
 修改目录结构:
 
-- 添加 `src/`, 将 `pages/api/` 移至 `src/api/`
-- 创建 `src/store/index.ts`
+- 创建 `src/store`
 
 ```
-# src/store/index.ts
+# demo 详见 src/store
 ```
 
 ### [Prisma](https://www.prisma.io/) 连接 mongoDB
@@ -357,10 +360,11 @@ datasource db {
 
 ```
 # prisma/schema.prisma 中定义模型
-model User {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  name    String
-  email   String?   @unique
+model Link {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  description String
+  url         String
+  ts_created  Int?
 }
 ```
 
@@ -382,47 +386,177 @@ npx prisma db push
 ```
 
 ```
-# (新建初始化db脚本)scripts/init_db.ts
-import { PrismaClient } from '@prisma/client'
+# (新建初始化db脚本：Seeding your database) prisma/seed.ts
+import { PrismaClient, Prisma } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-async function main() {
-  await prisma.user.create({
-    data: {
-      name: "Musk"
+const linkData: Prisma.LinkCreateInput[] = [
+  {
+    url: 'google.com',
+    description: 'google',
+  },
+  {
+    url: 'baidu.com',
+    description: 'baidu',
+  },
+]
+
+export async function main() {
+  try {
+    console.log(`Start seeding ...`)
+    for (const l of linkData) {
+      const link = await prisma.link.create({
+        data: l,
+      })
+      console.log(`Created link with id: ${link.id}`)
     }
-  })
+    console.log(`Seeding finished.`)
+  } catch (err) {
+    console.error(err)
+    process.exit(1)
+  } finally {
+    await prisma.$disconnect()
+  }
 }
 
 main()
-  .finally(async () => {
-    await prisma.$disconnect()
-  })
 ```
 
 ```
-# 在 package.json 中加入配置 "type": "module" 才可使用 import 语法
-"type": "module"                      +
-"scripts": {
-  ...
-  }
+# package.json
+# 需要用到 ts-node : npm install -g ts-node
+"dependencies": {
+    ...
+}
+"prisma": {                                             +
+  "seed": "ts-node --transpile-only prisma/seed.ts"     +
+},                                                      +
 ```
 
 ```
 # bash
 # 脚本初始化数据
-npx ts-node --esm scripts/init_db.ts
+npx prisma db seed
+
+# 如遇到 error: 'ts-node' 不是内部或外部命令，也不是可运行的程序。
+# 检查全局安装路径是否已添加到环境变量中，
+# 如用 yarn global add ts-node 命令需要另外在系统中添加环境变量路径。
 ```
 
-### [SWR](https://swr.vercel.app/zh-CN) + [GraphQL Yoga](https://the-guild.dev/graphql/yoga-server/docs)
+### [SWR](https://swr.vercel.app/zh-CN) + [GraphQL Yoga](https://the-guild.dev/graphql/yoga-server/docs) + [graphql-request](https://github.com/jasonkuhrt/graphql-request)
 
 > swr：用于数据请求的 React Hooks 库<br>
 > 可以用 [React Query](https://react-query-v3.tanstack.com/) 代替 SWR
 > yoga: 搭建 GraphQL 服务器
+> graphql-request: 发送 GraphQL 请求
 
 ```
 # bash
-yarn add swr
-yarn add graphql graphql-yoga
+yarn add swr graphql graphql-yoga graphql-request
+```
+
+```
+# (新建db上下文：关联数据库) src/server/context.ts
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
+
+export type GraphQLContext = {
+  prisma: PrismaClient
+}
+
+export function createContext(): GraphQLContext {
+  return { prisma }
+}
+```
+
+```
+# (新建db议程：数据-请求映射图谱) src/server/schema.ts
+import { makeExecutableSchema } from '@graphql-tools/schema'
+import type { GraphQLContext } from './context'
+import type { Link } from '@prisma/client'
+
+const typeDefinitions = /* GraphQL */ `
+  type Query {
+    info: String!
+    feed: [Link!]!
+  }
+
+  type Link {
+    id: ID!
+    description: String!
+    url: String!
+  }
+`
+const resolvers = {
+  Query: {
+    info: () => `This is the API of a Hackernews Clone`,
+    feed: (parent: unknown, args: {}, context: GraphQLContext) => context.prisma.link.findMany(),
+  },
+  Link: {
+    id: (parent: Link) => parent.id,
+    description: (parent: Link) => parent.description,
+    url: (parent: Link) => parent.url,
+  },
+}
+
+export const schema = makeExecutableSchema({
+  resolvers: [resolvers],
+  typeDefs: [typeDefinitions],
+})
+```
+
+```
+# (新建 graphql 服务器实例，监听接口为 /api/graphql) pages/api/graphql.ts
+import { createContext } from '@/src/server/context'
+import { schema } from '@/src/server/schema'
+import { createYoga } from 'graphql-yoga'
+import { NextApiRequest, NextApiResponse } from 'next'
+
+export default createYoga<{
+  req: NextApiRequest
+  res: NextApiResponse
+}>({
+  schema,
+  context: createContext,
+  // Needed to be defined explicitly because our endpoint lives at a different path other than `/graphql`
+  graphqlEndpoint: '/api/graphql',
+})
+```
+
+```
+# (新建 demo 页面) pages/demo.ts
+import request from 'graphql-request'
+import { NextPage } from 'next'
+import useSWR from 'swr'
+
+const DemoPage: NextPage = () => {
+  const { data, error, isLoading } = useSWR(
+    `query {
+      feed {
+        id
+        url
+        description
+      }
+    }
+      `,
+    (query) => request('api/graphql', query)
+  )
+  console.log(data, error, isLoading)
+
+  if (error) return <div>Failed to load</div>
+  if (isLoading) return <div>Loading...</div>
+  if (!data) return null
+
+  return (
+    <div>
+      {data.feed.map((link, index: number) => (
+        <div key={index}>{link.url}</div>
+      ))}
+    </div>
+  )
+}
+
+export default DemoPage
 ```

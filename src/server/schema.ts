@@ -24,21 +24,21 @@ const resolvers = {
     description: (parent: Link) => parent.description,
     url: (parent: Link) => parent.url,
   },
-  Mutation: {
-    async postLink(
-      parent: unknown,
-      args: { description: string; url: string },
-      context: GraphQLContext
-    ) {
-      const newLink = await context.prisma.link.create({
-        data: {
-          url: args.url,
-          description: args.description,
-        },
-      })
-      return newLink
-    },
-  },
+  // Mutation: {
+  //   async postLink(
+  //     parent: unknown,
+  //     args: { description: string; url: string },
+  //     context: GraphQLContext
+  //   ) {
+  //     const newLink = await context.prisma.link.create({
+  //       data: {
+  //         url: args.url,
+  //         description: args.description,
+  //       },
+  //     })
+  //     return newLink
+  //   },
+  // },
 }
 
 export const schema = makeExecutableSchema({
