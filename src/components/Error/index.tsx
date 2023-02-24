@@ -1,7 +1,8 @@
-import { useUpdateLocaleCallback } from '@/src/store/global/hooks'
 import { Button } from 'antd-mobile'
 import React, { FC, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { useUpdateLocaleCallback } from '@/src/store/global/hooks'
 
 interface IProps {
   statusCode: number

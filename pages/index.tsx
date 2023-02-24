@@ -1,11 +1,12 @@
+import { Inter } from '@next/font/google'
+import { Button } from 'antd-mobile'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import { useGlobal } from '@/src/store/global/hooks'
 import { useEffect } from 'react'
-import { Button } from 'antd-mobile'
 import { useTranslation } from 'react-i18next'
+
+import { useGlobal } from '@/src/store/global/hooks'
 
 const inter = Inter({ subsets: ['latin'] })
 const Home: NextPage = () => {

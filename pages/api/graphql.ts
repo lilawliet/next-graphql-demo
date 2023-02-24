@@ -1,7 +1,8 @@
-import { createContext } from '@/src/server/context'
-import { schema } from '@/src/server/schema'
 import { createYoga } from 'graphql-yoga'
 import { NextApiRequest, NextApiResponse } from 'next'
+
+import { createContext } from '@/src/server/context'
+import { schema } from '@/src/server/schema'
 
 export default createYoga<{
   req: NextApiRequest

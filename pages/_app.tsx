@@ -1,9 +1,10 @@
-import store from '@/src/store'
 import '@/styles/globals.css'
+import 'src/i18n'
+
 import type { AppProps } from 'next/app'
 import { Provider } from 'react-redux'
 
-import 'src/i18n'
+import store from '@/src/store'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

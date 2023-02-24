@@ -4,7 +4,7 @@ import { Button } from 'antd-mobile'
 
 function About() {
   return (
-    <div className="bg-red-500 text-4xl">
+    <div className="text-4xl bg-red-500">
       About
       <Button color="primary"> antd btn</Button>
     </div>
