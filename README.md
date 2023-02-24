@@ -150,6 +150,15 @@ yarn add --dev @typescript-eslint/eslint-plugin
 }                                                       +
 ```
 
+```
+# *可选 额外的配置项
+# [eslint-plugin-simple-import-sort](https://www.npmjs.com/package/eslint-plugin-simple-import-sort) 对 import 排序
+# [eslint-plugin-unused-imports](https://www.npmjs.com/package/eslint-plugin-unused-imports) 删除不用的 import
+# [eslint-config-standard](https://github.com/standard/eslint-config-standard) 一个共享的代码规范配置方案
+# [standard 工具及文档](https://standardjs.com/readme-zhcn.html)
+
+```
+
 #### Prettier (代码规范)
 
 ```
