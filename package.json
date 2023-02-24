@@ -9,6 +9,7 @@
     "build:prod": "cross-env NODE_ENV=production next build",
     "start": "next start",
     "lint": "next lint",
+    "lint:fix": "eslint --fix \"pages/**/*.{js,jsx,json,md,ts,tsx}\" \"src/**/*.{js,jsx,json,md,ts,tsx}\" \"scripts/**/*.{js,jsx,json,md,ts,tsx}\"",
     "_prettier": "prettier --write \"pages/**/*.{js,jsx,json,md,ts,tsx}\" \"src/**/*.{js,jsx,json,md,ts,tsx}\" \"scripts/**/*.{js,jsx,json,md,ts,tsx}\""
   },
   "dependencies": {
@@ -19,6 +20,10 @@
     "cross-env": "^7.0.3",
     "eslint": "8.33.0",
     "eslint-config-next": "13.1.6",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.6.1",
+    "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "eslint-plugin-unused-imports": "^2.0.0",
     "graphql": "^16.6.0",

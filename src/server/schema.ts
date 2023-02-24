@@ -1,6 +1,7 @@
 import { makeExecutableSchema } from '@graphql-tools/schema'
-import type { GraphQLContext } from './context'
 import type { Link } from '@prisma/client'
+
+import type { GraphQLContext } from './context'
 
 const typeDefinitions = /* GraphQL */ `
   type Query {

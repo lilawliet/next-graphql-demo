@@ -1,18 +1,19 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query/react'
 import {
-  persistStore,
-  persistReducer,
+  createMigrate,
   FLUSH,
-  REHYDRATE,
   PAUSE,
   PERSIST,
+  PersistedState,
+  persistReducer,
+  persistStore,
   PURGE,
   REGISTER,
-  createMigrate,
-  PersistedState,
+  REHYDRATE,
 } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
+
 // import storageSession from 'redux-persist/lib/storage/session' // sessionStorage机制
 import global from './global/reducer'
 // import { updateVersion } from './global/actions'
@@ -32,7 +33,7 @@ const migrations = {
 
 const persistConfig = {
   key: 'root',
-  storage: storage, // storage or storageSession
+  storage, // storage or storageSession
   version: 1,
   blackList: [], // 不会被存到缓存中
   // whiteList: [],  // 配置之后，只会缓存列表中的字段

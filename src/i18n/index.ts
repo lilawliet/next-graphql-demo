@@ -1,7 +1,8 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
-import zh_CN from './_locales/zh_CN.json'
-import en_US from './_locales/en_US.json'
+
+import enUS from './_locales/en_US.json'
+import zhCN from './_locales/zh_CN.json'
 
 export type LOCALE = 'zh_CN' | 'en_US'
 
@@ -10,10 +11,10 @@ i18n.use(initReactI18next).init({
   fallbackLng: process.env.NEXT_PUBLIC_LOCALE,
   resources: {
     zh_CN: {
-      translation: zh_CN,
+      translation: zhCN,
     },
     en_US: {
-      translation: en_US,
+      translation: enUS,
     },
   },
   debug: false,

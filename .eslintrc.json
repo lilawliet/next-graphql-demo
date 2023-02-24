@@ -5,6 +5,7 @@
     "next/core-web-vitals",
     // "plugin:@typescript-eslint/recommended`: ESLint 内置的 "推荐 "配置
     "plugin:@typescript-eslint/recommended",
+    "standard",
     // 最后加上 prettier, eslint 与 prettier 的冲突将被覆盖
     "prettier"
   ],
@@ -24,9 +25,19 @@
       { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
     ],
 
+    // 其他主要配置
     "@typescript-eslint/ban-types": 0,
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/no-explicit-any": 0,
     "prefer-const": "warn"
-  }
+  },
+  "overrides": [
+    {
+      // json文件 不检查 no-unused-expressions
+      "files": ["*.json"],
+      "rules": {
+        "no-unused-expressions": "off"
+      }
+    }
+  ]
 }

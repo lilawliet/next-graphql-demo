@@ -1,5 +1,7 @@
-import { LOCALE } from '@/src/i18n'
 import { createSlice } from '@reduxjs/toolkit'
+
+import { LOCALE } from '@/src/i18n'
+
 import { updateVersion } from './actions'
 
 export type GlobalState = {
