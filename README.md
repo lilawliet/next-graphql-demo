@@ -1,4 +1,4 @@
-Nextjs (v 13.1) + Ant-Design-Mobile (v 5) + Redux Toolkit + MongoDB + Prisma + SWR + GraphQL Yoga 完整基础示例 + 搭建流程指引
+Nextjs (v 13.1) + Ant-Design-Mobile (v 5) + Redux Toolkit + MongoDB + Prisma + SWR + GraphQL Yoga 完整基础示例 + 从 0 到 1 搭建流程指引
 
 ## 技术栈
 

@@ -15,33 +15,49 @@ storage:
     dbPath: D:\vm-share\next-graphql-demo\datas\db1 # 删除
     dbPath: [你的项目绝对路径]\datas\db1 # 新增
 ...
+```
+
+- 2. 在 datas 目录下面创建对应第一步的存储数据和日志的文件夹
+
+```
+mkdir -p .\datas\db1
+mkdir -p .\datas\db2
+mkdir -p .\datas\db3
+```
+
+- 3. 分别用三个命令窗口启动三个服务（不要关闭窗口）
 
 ```
 
-- 2. 分别用三个命令窗口启动三个服务（不要关闭窗口）
-
-```
 # 注意将这里的绝对路径 D:\vm-share\next-graphql-demo 改为本机的项目绝对路径
+
 mongod -f D:\vm-share\next-graphql-demo\config\db1\mongod.conf
 mongod -f D:\vm-share\next-graphql-demo\config\db2\mongod.conf
 mongod -f D:\vm-share\next-graphql-demo\config\db3\mongod.conf
-```
-
-- 3. 进入 mongodb 控制台
 
 ```
+
+- 4. 进入 mongodb 控制台
+
+```
+
 mongosh "mongodb://127.0.0.1:27017"
-```
-
-- 4. 创建集群
 
 ```
-rs.initiate({ _id: "rs0",  members: [{ _id: 0, host: "localhost:27017" },{ _id: 1, host: "localhost:27018" },{
- _id: 2, host: "localhost:27019"}]})
-```
 
-- 5. 初始化数据
+- 5. 创建集群
 
 ```
+
+rs.initiate({ \_id: "rs0", members: [{ _id: 0, host: "localhost:27017" },{ _id: 1, host: "localhost:27018" },{
+_id: 2, host: "localhost:27019"}]})
+
+```
+
+- 6. 初始化数据
+
+```
+
 npx prisma db seed
+
 ```
