@@ -1,4 +1,4 @@
-Nextjs (v 13.1) + Ant-Design-Mobile (v 5) + Redux Toolkit + Prisma + SWR + GraphQL Yoga 完整基础示例 + 搭建流程指引
+Nextjs (v 13.1) + Ant-Design-Mobile (v 5) + Redux Toolkit + MongoDB + Prisma + SWR + GraphQL Yoga 完整基础示例 + 搭建流程指引
 
 ## 技术栈
 
@@ -26,25 +26,70 @@ Nextjs (v 13.1) + Ant-Design-Mobile (v 5) + Redux Toolkit + Prisma + SWR + Graph
 - cross-env：跨平台设置环境变量
 - i18next：国际化
 
-## 开始运行
+## 第一次运行
 
 ```bash
-npm install
-# or
+# 1. 进入项目
+cd next-graphql-demo
+```
+
+```bash
+# 2. 安装依赖
 yarn
-# or
-pnpm install
 ```
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+# 3. 在 .env 中修改数据库连接地址
+DATABASE_URL = "mongodb://localhost:27017/demo"
 ```
 
-## 架构搭建流程（指引）
+```bash
+# 4. 注入 ORM 模型
+npx prisma generate
+```
+
+```bash
+# 5. 更新模型到数据库中
+npx prisma db push
+```
+
+```bash
+# 6.1 初始化数据前，需要使用 ts-node
+yarn add global ts-node
+```
+
+> 初始化数据需要使用 mongodb 需要部署复制集，具体阅读 [config/README.md](config/README.md)
+
+```bash
+# 6.2 初始化数据
+npx prisma db seed
+```
+
+```bash
+# 7. 运行
+yarn dev
+```
+
+### 运行
+
+```bash
+yarn dev
+```
+
+### prisma(orm) 相关命令
+
+```bash
+# 查看 prisma 命令
+npx prisma
+# 1. （执行下面这行）依赖库 prisma 中 注入 ORM 模型
+npx prisma generate
+# 2. （执行下面这行） 更新模型到数据库中
+npx prisma db push
+# 同步数据库已有模型
+npx prisma db pull
+```
+
+## 架构从 0 到 1 搭建流程（指引）
 
 ### 创建 App
 
@@ -380,18 +425,6 @@ model Link {
 ```
 # bash 安装 Prisma 客户端
 yarn add @prisma/client
-```
-
-```
-# bash
-# 查看 prisma 命令
-# npx prisma
-# 1. （执行下面这行）依赖库 prisma 中 注入 ORM 模型
-npx prisma generate
-# 2. （执行下面这行） 更新模型到数据库中
-npx prisma db push
-# 同步数据库已有模型
-# npx prisma db pull
 ```
 
 ```
